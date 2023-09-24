@@ -1,6 +1,9 @@
 
 body{
   background-color: #000;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 h1, h4{
@@ -70,6 +73,13 @@ canvas{
   position: relative;
 }
 
+.appContainer{
+  display: flex;
+  flex-direction: column;
+  width: 90%;
+  max-width: 600px;
+}
+
 #kryss{
   color: white;
   position: absolute;
@@ -112,8 +122,9 @@ th{
 }
 
 #knapper{
-  width: 100%;
-  text-align: center;
+  display: flex;
+  flex-direction: row;
+
 }
 
 .fargeKnapp{
