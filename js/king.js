@@ -7,25 +7,25 @@ var resetButton = document.querySelector("#reset");
 var showScorebtn = document.querySelector("#setScore");
 var kryssEl = document.querySelector("#kryss");
 var timerEl = document.querySelector("#timer");
-var lyd = document.querySelector("#lyd");
+var sound = document.querySelector("#lyd");
 timerEl.addEventListener("click", startTimer);
 kryssEl.addEventListener("click", lukk);
 showScorebtn.addEventListener("click", showScoreboard);
 resetButton.addEventListener("click", resetScore);
-buttonAdd.addEventListener("click", nyttLag);
-buttonRemove.addEventListener("click", fjernLag);
+buttonAdd.addEventListener("click", newTeam);
+buttonRemove.addEventListener("click", removeTeam);
 
-alleLag = [];
+var allTeams = [];
 var i = 0;
-var forrigeKnapp ="pa";
-var startLag = 4;
+var lastButton ="pa";
+var startTeams = 4;
 
-class Lag {
-  constructor(score, streak, storstStreak, navn, id) {
+class Team {
+  constructor(score, streak, greatestStreak, name, id) {
     this.score = score;
     this.streak = streak;
-    this.storstStreak = storstStreak;
-    this.navn = navn;
+    this.greatestStreak = greatestStreak;
+    this.name = name;
     this.id = id +1;
 
     var container = document.createElement("div");
@@ -40,18 +40,18 @@ class Lag {
     var venstreOppe = document.createElement("p");
     venstreOppe.className = "usynlig";
     venstreOppe.id = "dritt"+i;
-    venstreOppe.innerHTML = "streak: " + this.storstStreak;
+    venstreOppe.innerHTML = "streak: " + this.greatestStreak;
     header.appendChild(venstreOppe);
 
     var team = document.createElement("input");
     team.className = "Teamname";
-    team.placeholder = "Lag " + this.id;
+    team.placeholder = "Team " + this.id;
     team.id = "n"+i;
-    team.addEventListener("keyup", byttNavn);
+    team.addEventListener("keyup", changeName);
     header.appendChild(team);
 
     var streakEl = document.createElement("p");
-    streakEl.innerHTML ="streak: " + this.storstStreak;
+    streakEl.innerHTML ="streak: " + this.greatestStreak;
     streakEl.className = "streakNumber";
     streakEl.id = "s"+i;
     header.appendChild(streakEl);
@@ -87,90 +87,90 @@ setup();
 
 
 function setup() {
-  for (var j = 0; j < startLag; j++) {
-    nyttLag()
+  for (var j = 0; j < startTeams; j++) {
+    newTeam()
   }
 }
 
-function nyttLag() {
-  if (alleLag.length>=10) {
+function newTeam() {
+  if (allTeams.length>=10) {
     buttonAdd.style.backgroundColor = "#777";
-    buttonAdd.removeEventListener("click", nyttLag);
+    buttonAdd.removeEventListener("click", newTeam);
   }else {
 
     buttonRemove.style.backgroundColor = "white";
-    buttonRemove.addEventListener("click", fjernLag);
+    buttonRemove.addEventListener("click", removeTeam);
     buttonAdd.style.backgroundColor = "white";
-    buttonAdd.addEventListener("click", nyttLag);
-    var x = new Lag(0, 1, 1, "", i);
-    alleLag.push(x);
+    buttonAdd.addEventListener("click", newTeam);
+    var x = new Team(0, 1, 1, "", i);
+    allTeams.push(x);
   }
 }
 
-function fjernLag(){
-  if (alleLag.length<=1) {
+function removeTeam(){
+  if (allTeams.length<=1) {
     buttonRemove.style.backgroundColor = "#777";
-    buttonRemove.removeEventListener("click", fjernLag);
+    buttonRemove.removeEventListener("click", removeTeam);
   }else {
     buttonRemove.style.backgroundColor = "white";
-    buttonRemove.addEventListener("click", fjernLag);
+    buttonRemove.addEventListener("click", removeTeam);
     buttonAdd.style.backgroundColor = "white";
-    buttonAdd.addEventListener("click", nyttLag);
+    buttonAdd.addEventListener("click", newTeam);
 
       var divEl = document.querySelectorAll(".container");
       htmlContainer.removeChild(divEl[divEl.length-1]);
-      alleLag.pop();
+      allTeams.pop();
       i--;
   }
 }
 
 
-function byttNavn(e){
- alleLag[e.target.id[1]].navn = e.target.value;
+function changeName(e){
+ allTeams[e.target.id[1]].navn = e.target.value;
 }
 
 function resetScore() {
-  for (var k = 0; k < alleLag.length; k++) {
-    alleLag[k].score = 0;
-    alleLag[k].streak = 1;
-    alleLag[k].storstStreak = 1;
+  for (var k = 0; k < allTeams.length; k++) {
+    allTeams[k].score = 0;
+    allTeams[k].streak = 1;
+    allTeams[k].storstStreak = 1;
     var tall = document.getElementById('t' +k);
-    tall.innerHTML =alleLag[k].score;
+    tall.innerHTML =allTeams[k].score;
     var streakEl = document.getElementById('s' +k);
-    streakEl.innerHTML = "streak: " + alleLag[k].storstStreak;
+    streakEl.innerHTML = "streak: " + allTeams[k].storstStreak;
   }
 }
 
 var streakNa = 1;
 
 function pluss(e) {
-  alleLag[e.target.id[1]].score ++;
+  allTeams[e.target.id[1]].score ++;
   var tall = document.getElementById('t' +e.target.id[1]);
-  tall.innerHTML =alleLag[e.target.id[1]].score;
+  tall.innerHTML =allTeams[e.target.id[1]].score;
 
   var streakEl = document.getElementById('s' +e.target.id[1]);
 
-  if (forrigeKnapp == e.target.id) {
+  if (lastButton == e.target.id) {
     streakNa++;
-    alleLag[e.target.id[1]].streak = streakNa;
+    allTeams[e.target.id[1]].streak = streakNa;
 
-    if (alleLag[e.target.id[1]].streak > alleLag[e.target.id[1]].storstStreak) {
-      alleLag[e.target.id[1]].storstStreak = alleLag[e.target.id[1]].streak;
+    if (allTeams[e.target.id[1]].streak > allTeams[e.target.id[1]].storstStreak) {
+      allTeams[e.target.id[1]].storstStreak = allTeams[e.target.id[1]].streak;
     }
 
   }else {
       streakNa = 1;
   }
-  streakEl.innerHTML = "streak: " + alleLag[e.target.id[1]].storstStreak;
-  forrigeKnapp = e.target.id;
+  streakEl.innerHTML = "streak: " + allTeams[e.target.id[1]].storstStreak;
+  lastButton = e.target.id;
 }
 
 function minus(e) {
-  alleLag[e.target.id[1]].score --;
+  allTeams[e.target.id[1]].score --;
   var tall = document.getElementById('t' +e.target.id[1]);
-  tall.innerHTML =alleLag[e.target.id[1]].score;
+  tall.innerHTML =allTeams[e.target.id[1]].score;
 
-  forrigeKnapp = e.target.id;
+  lastButton = e.target.id;
 }
 
 
@@ -184,22 +184,22 @@ function showScoreboard() {
   tabellEl.innerHTML = "";
 
 
-  var sortert = alleLag.slice(0);
-  sortert.sort((a , b) => (a.score < b.score) ? 1 : -1);
+  var sorted = allTeams.slice(0);
+  sorted.sort((a , b) => (a.score < b.score) ? 1 : -1);
 
   tabellEl.innerHTML += "<tr><th>Plass</th><th>Navn</th><th>Score</th></tr>";
 
 
-  for (var l = 0; l < sortert.length; l++) {
+  for (var l = 0; l < sorted.length; l++) {
     var plass = l+1;
 
-    if (sortert[l].navn == "") {
-      var lagNavn = "Lag " + sortert[l].id;
+    if (sorted[l].name == "") {
+      var teamName = "Team " + sorted[l].id;
     }else {
-      var lagNavn =sortert[l].navn;
+      var teamName =sorted[l].name;
     }
 
-    tabellEl.innerHTML += "<tr><td>"+plass+"</td><td>"+lagNavn+"</td><td>"+sortert[l].score+"</td></tr>";
+    tabellEl.innerHTML += "<tr><td>"+plass+"</td><td>"+teamName+"</td><td>"+sorted[l].score+"</td></tr>";
 
   }
   resultatEl.style.display = "block";
@@ -215,13 +215,13 @@ function lukk() {
 
 
 //timer
-var timerKlokke = document.querySelector("#timerKlokke");
+var timerClock = document.querySelector("#timerKlokke");
 var x;
 function startTimer() {
   clearInterval(x);
-  var tid = prompt("Tid i minutter");
+  var time = prompt("Tid i minutter");
   var nowTime = new Date;
-  var deadlineDate = new Date(nowTime.getTime() + (tid*60000));
+  var deadlineDate = new Date(nowTime.getTime() + (time*60000));
 
   x = setInterval(
     function(){
@@ -229,12 +229,12 @@ function startTimer() {
       t = deadlineDate.getTime() - nowDate.getTime();
       var minutes = ("0" + Math.floor(t/60000)).slice(-2);
       var seconds = ("0" +Math.floor((t%60000)/1000)).slice(-2);
-      timerKlokke.innerHTML = minutes +":" +seconds;
+      timerClock.innerHTML = minutes +":" +seconds;
 
       if (t<0) {
         clearInterval(x);
-          timerKlokke.innerHTML = "Tiden er ute";
-          lyd.play();
+          timerClock.innerHTML = "Tiden er ute";
+          sound.play();
       }
     }, 1000);
 }
