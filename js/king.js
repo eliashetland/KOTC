@@ -39,7 +39,7 @@ class Team {
 
     var venstreOppe = document.createElement("p");
     venstreOppe.className = "usynlig";
-    venstreOppe.id = "dritt"+i;
+    venstreOppe.id = "notused"+i;
     venstreOppe.innerHTML = "streak: " + this.greatestStreak;
     header.appendChild(venstreOppe);
 
@@ -133,11 +133,11 @@ function resetScore() {
   for (var k = 0; k < allTeams.length; k++) {
     allTeams[k].score = 0;
     allTeams[k].streak = 1;
-    allTeams[k].storstStreak = 1;
+    allTeams[k].greatestStreak = 1;
     var tall = document.getElementById('t' +k);
     tall.innerHTML =allTeams[k].score;
     var streakEl = document.getElementById('s' +k);
-    streakEl.innerHTML = "streak: " + allTeams[k].storstStreak;
+    streakEl.innerHTML = "streak: " + allTeams[k].greatestStreak;
   }
 }
 
@@ -154,14 +154,14 @@ function pluss(e) {
     streakNa++;
     allTeams[e.target.id[1]].streak = streakNa;
 
-    if (allTeams[e.target.id[1]].streak > allTeams[e.target.id[1]].storstStreak) {
-      allTeams[e.target.id[1]].storstStreak = allTeams[e.target.id[1]].streak;
+    if (allTeams[e.target.id[1]].streak > allTeams[e.target.id[1]].greatestStreak) {
+      allTeams[e.target.id[1]].greatestStreak = allTeams[e.target.id[1]].streak;
     }
 
   }else {
       streakNa = 1;
   }
-  streakEl.innerHTML = "streak: " + allTeams[e.target.id[1]].storstStreak;
+  streakEl.innerHTML = "streak: " + allTeams[e.target.id[1]].greatestStreak;
   lastButton = e.target.id;
 }
 
